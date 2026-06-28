@@ -1,10 +1,23 @@
-FROM ubuntu:latest
-RUN apt-get update -y && apt-get upgrade -y \
-    && apt-get install -y --no-install-recommends gcc libffi-dev musl-dev ffmpeg aria2 python3-pip \
+# Python बेस इमेज
+FROM python:3.10-slim
+
+# काम करने की डायरेक्ट्री
+WORKDIR /app
+
+# सिस्टम डिपेंडेंसी (ffmpeg, yt-dlp, aria2, wget)
+RUN apt-get update && apt-get install -y \
+    ffmpeg \
+    wget \
+    aria2 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-COPY . /app/
-WORKDIR /app/
-RUN pip3 install --no-cache-dir --upgrade --requirement Installer
-CMD python3 modules/main.py
+# Python पैकेज इंस्टॉल करें
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# बाकी कोड कॉपी करें
+COPY . .
+
+# बॉट चलाएँ
+CMD ["python", "main.py"]
