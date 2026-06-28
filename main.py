@@ -5,6 +5,7 @@ import time
 import asyncio
 import requests
 import subprocess
+import logging
 
 import core as helper
 from utils import progress_bar
@@ -21,6 +22,9 @@ from subprocess import getstatusoutput
 from pyrogram import Client, filters
 from pyrogram.types import Message
 from pyrogram.errors import FloodWait
+
+# लॉगिंग सेट करें
+logging.basicConfig(level=logging.INFO)
 
 bot = Client(
     name=":memory:",
@@ -195,4 +199,7 @@ async def upload_handler(bot: Client, m: Message):
 
     await m.reply_text("✅ **Mission Successful**")
 
-bot.run()
+# ✅ Render पर सही से start होने के लिए
+if __name__ == "__main__":
+    logging.info("✅ Bot is starting...")
+    bot.run()
